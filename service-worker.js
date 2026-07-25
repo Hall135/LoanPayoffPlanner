@@ -1,11 +1,10 @@
-const CACHE_NAME = 'loan-payoff-planner-cache-v1';
+const CACHE_NAME = 'loan-payoff-planner-cache-v2';
 
 const FILES_TO_CACHE = [
   './index.html',
   './graphs.html',
   './manifest.json',
-  './assets/icon-192.png',
-  './assets/icon-512.png',
+  './assets/payments_180dp_1F1F1F.png',
   './libs/chartjs/chart.js',
   './css/styles.css',
   './js/app.js',
