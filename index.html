@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121212">
+  <meta name="description" content="Plan individual loan payments and project payoff timelines.">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./assets/payments_180dp_1F1F1F.png">
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>Loan Payoff Planner</title>
+</head>
+<body data-page="manage">
+  <main class="container">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">OFFLINE LOAN PLANNER</p>
+        <h1>Loan Management</h1>
+        <p class="page-subtitle">Add loans, plan lump sums, and configure a payoff scenario.</p>
+      </div>
+      <a class="primary-link" href="./graphs.html">View analysis</a>
+    </header>
+
+    <section class="status-region" aria-live="polite" id="statusRegion"></section>
+
+    <section class="grid two-column">
+      <article class="card">
+        <div class="section-heading">
+          <div>
+            <h2 id="loanFormTitle">Add loan</h2>
+            <p>Loan names must be unique.</p>
+          </div>
+        </div>
+        <form id="loanForm" novalidate>
+          <input type="hidden" id="loanId">
+          <div class="form-grid">
+            <label>Loan name
+              <input id="loanName" required maxlength="80" placeholder="Example: Student Loan">
+            </label>
+            <label>APR (%)
+              <input id="loanApr" required type="number" min="0" max="1000" step="0.001" placeholder="6.5">
+            </label>
+            <label>Principal
+              <input id="loanPrincipal" required type="number" min="0" step="0.01" placeholder="12000">
+            </label>
+            <label>Current accrued interest
+              <input id="loanAccruedInterest" required type="number" min="0" step="0.01" value="0">
+            </label>
+            <label>Interest type
+              <select id="loanInterestType">
+                <option value="simple">Simple interest</option>
+                <option value="compound">Monthly compounding</option>
+              </select>
+            </label>
+            <label>Payment day
+              <select id="loanPaymentDay"></select>
+            </label>
+            <label>Minimum monthly payment
+              <input id="loanMinimumPayment" required type="number" min="0" step="0.01" placeholder="250">
+            </label>
+            <label>Additional monthly payment
+              <input id="loanAdditionalPayment" required type="number" min="0" step="0.01" value="0">
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="button primary" type="submit">Save loan</button>
+            <button class="button secondary" type="button" id="cancelLoanEdit" hidden>Cancel edit</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="card">
+        <div class="section-heading">
+          <div>
+            <h2 id="lumpFormTitle">Add lump sum</h2>
+            <p>Lump sums use month/year timing.</p>
+          </div>
+        </div>
+        <form id="lumpForm" novalidate>
+          <input type="hidden" id="lumpId">
+          <div class="form-grid">
+            <label>Amount
+              <input id="lumpAmount" required type="number" min="0.01" step="0.01" placeholder="1000">
+            </label>
+            <label>Month
+              <input id="lumpYearMonth" required type="month">
+            </label>
+            <label>Allocation method
+              <select id="lumpAllocationMethod">
+                <option value="specificLoan">Specific loan</option>
+                <option value="avalanche">Avalanche</option>
+                <option value="snowball">Snowball</option>
+              </select>
+            </label>
+            <label id="lumpTargetLoanWrap">Target loan
+              <select id="lumpLoanId"></select>
+            </label>
+          </div>
+          <div class="button-row">
+            <button class="button primary" type="submit">Save lump sum</button>
+            <button class="button secondary" type="button" id="cancelLumpEdit" hidden>Cancel edit</button>
+          </div>
+        </form>
+      </article>
+    </section>
+
+    <section class="card">
+      <div class="section-heading">
+        <div>
+          <h2>Simulation settings</h2>
+          <p>Rollover transfers future payment capacity after a loan is paid off.</p>
+        </div>
+      </div>
+      <form id="settingsForm" novalidate>
+        <div class="form-grid settings-grid">
+          <label>Simulation start month
+            <input id="simulationStartDate" required type="month">
+          </label>
+          <label>Maximum simulation years
+            <input id="maxSimulationYears" required type="number" min="1" max="100" step="1" value="10">
+          </label>
+          <label class="checkbox-label">
+            <input id="rolloverEnabled" type="checkbox">
+            <span>Enable payment rollover</span>
+          </label>
+          <label>Rollover strategy
+            <select id="rolloverStrategy">
+              <option value="avalanche">Avalanche</option>
+              <option value="snowball">Snowball</option>
+            </select>
+          </label>
+        </div>
+        <div class="button-row">
+          <button class="button primary" type="submit">Save settings</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="grid two-column">
+      <article class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Loans</h2>
+            <p>Creation order is also used to break payoff-strategy ties.</p>
+          </div>
+        </div>
+        <div id="loanList" class="stack-list"></div>
+      </article>
+      <article class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Lump sums</h2>
+            <p>Scheduled extra payments used by the projection.</p>
+          </div>
+        </div>
+        <div id="lumpList" class="stack-list"></div>
+      </article>
+    </section>
+
+    <section class="card data-card">
+      <div class="section-heading">
+        <div>
+          <h2>Backup and restore</h2>
+          <p>Export your inputs before importing replacement data.</p>
+        </div>
+      </div>
+      <div class="button-row">
+        <button class="button secondary" type="button" id="exportJson">Export JSON</button>
+        <label class="button secondary file-button">
+          Import JSON
+          <input id="importJson" type="file" accept="application/json,.json">
+        </label>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Primary navigation">
+    <a class="nav-link active" href="./index.html">Manage</a>
+    <a class="nav-link" href="./graphs.html">Analysis</a>
+  </nav>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>

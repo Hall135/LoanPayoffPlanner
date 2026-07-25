@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#121212">
+  <meta name="description" content="Loan payoff analysis and charts.">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./assets/payments_180dp_1F1F1F.png">
+  <link rel="stylesheet" href="./css/styles.css">
+  <title>Loan Payoff Planner — Analysis</title>
+</head>
+<body data-page="analysis">
+  <main class="container">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">OFFLINE LOAN PLANNER</p>
+        <h1>Analysis and Graphs</h1>
+        <p class="page-subtitle">Projected balances use your saved loans, settings, and scheduled lump sums.</p>
+      </div>
+      <a class="primary-link" href="./index.html">Manage loans</a>
+    </header>
+
+    <section class="status-region" aria-live="polite" id="analysisStatus"></section>
+    <section id="analysisEmpty" class="card empty-state" hidden>
+      <h2>No loans to analyze</h2>
+      <p>Add at least one loan on the management page, then return here.</p>
+      <a class="button primary inline-button" href="./index.html">Add a loan</a>
+    </section>
+
+    <div id="analysisContent" hidden>
+      <section id="warningList" class="warning-list"></section>
+      <section id="metricGrid" class="metric-grid"></section>
+
+      <section class="card">
+        <div class="section-heading chart-heading">
+          <div>
+            <h2>Combined remaining debt</h2>
+            <p>Total principal plus accrued interest across all loans.</p>
+          </div>
+          <div class="button-row compact-row">
+            <button id="exportCombinedCsv" class="button secondary" type="button">Export CSV</button>
+            <button id="exportCombinedPng" class="button secondary" type="button">Export PNG</button>
+            <button id="exportAllCsv" class="button primary" type="button">Export all CSVs</button>
+          </div>
+        </div>
+        <div class="chart-wrap"><canvas id="combinedChart"></canvas></div>
+      </section>
+
+      <section class="card">
+        <div class="section-heading">
+          <div>
+            <h2>Loan payoff summary</h2>
+            <p>Shown in the order loans were created.</p>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Loan</th>
+                <th>Current balance</th>
+                <th>Payoff date</th>
+                <th>Months remaining</th>
+                <th>Total interest paid</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="summaryTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <div class="section-heading loan-chart-heading">
+          <div>
+            <h2>Individual loan charts</h2>
+            <p>Open a section to view or export that loan’s projection.</p>
+          </div>
+        </div>
+        <div id="loanCharts" class="loan-chart-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Primary navigation">
+    <a class="nav-link" href="./index.html">Manage</a>
+    <a class="nav-link active" href="./graphs.html">Analysis</a>
+  </nav>
+
+  <script src="./libs/chartjs/chart.js" defer></script>
+  <script type="module" src="./js/chartManager.js"></script>
+</body>
+</html>

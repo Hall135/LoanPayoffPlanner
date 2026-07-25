@@ -1,0 +1,17 @@
+{
+  "name": "Loan Payoff Planner",
+  "short_name": "Loan Planner",
+  "description": "Plan individual loan payments and project payoff timelines.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    {
+      "src": "./assets/payments_180dp_1F1F1F.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
