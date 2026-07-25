@@ -290,14 +290,6 @@ Project documentation, setup instructions, feature overview, financial-modeling 
 
 ## Asset Files
 
-### `assets/icon-192.png`
-
-PWA icon asset intended for standard application/icon usage.
-
-### `assets/icon-512.png`
-
-Larger PWA icon asset intended for installation and high-resolution contexts.
-
 ### `assets/payments_180dp_1F1F1F.png`
 
 Payment-themed image used as the browser favicon, Apple touch icon, and manifest icon.
